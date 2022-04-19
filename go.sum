@@ -1,5 +1,3 @@
-github.com/40t/go-sniffer v0.0.0-20201023123058-add66245ba50 h1:Xt51kZhTj7Mk+kDXOm/nPXAz3UEpI2LBSOOa5DNZRlc=
-github.com/40t/go-sniffer v0.0.0-20201023123058-add66245ba50/go.mod h1:zA3T7K50LOXrN6WGB1bCmG1qOStcS7FKHPS6duj+7fQ=
 github.com/google/gopacket v1.1.19 h1:ves8RnFZPGiFnTS0uPQStjwru6uO6h+nlr9j6fL7kF8=
 github.com/google/gopacket v1.1.19/go.mod h1:iJ8V8n6KS+z2U1A8pUwu8bW5SyEMkXJB8Yo/Vo+TKTo=
 golang.org/x/crypto v0.0.0-20190308221718-c2843e01d9a2/go.mod h1:djNgcEr1/C05ACkg1iLfiJU5Ep61QUkGW8qpdssI0+w=
