@@ -1,4 +1,4 @@
-module github.com/Enan01/go-sniffer
+module github.com/40t/go-sniffer
 
 go 1.15
 
