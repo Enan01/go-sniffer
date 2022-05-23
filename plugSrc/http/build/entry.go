@@ -1,14 +1,16 @@
 package build
 
 import (
-	"github.com/google/gopacket"
-	"io"
-	"log"
-	"strconv"
-	"fmt"
-	"os"
 	"bufio"
+	"fmt"
+	"io"
+	"io/ioutil"
+	"log"
 	"net/http"
+	"os"
+	"strconv"
+
+	"github.com/google/gopacket"
 )
 
 const (
@@ -54,8 +56,14 @@ func (m *H) ResolveStream(net, transport gopacket.Flow, buf io.Reader) {
 			msg += "] ["
 			msg += req.Host + req.URL.String()
 			msg += "] ["
-			req.ParseForm()
-			msg += req.Form.Encode()
+			body, err := ioutil.ReadAll(req.Body)
+			if err != nil {
+				log.Println("read request body err", err)
+				continue
+			}
+			// req.ParseForm()
+			// msg += req.Form.Encode()
+			msg += string(body)
 			msg += "]"
 
 			log.Println(msg)
