@@ -41,24 +41,30 @@ func NewInstance() *H {
 
 func (m *H) ResolveStream(net, transport gopacket.Flow, buf io.Reader) {
 	bio := bufio.NewReader(buf)
+
+	var err error
 	for {
 		// log.Println(net, transport)
 		if strconv.Itoa(m.port) == transport.Dst().String() {
-			decodeRequest(bio)
+			err = decodeRequest(bio)
 		} else {
-			decodeResponse(bio)
+			err = decodeResponse(bio)
+		}
+
+		if err == io.EOF {
+			return
 		}
 	}
 }
 
-func decodeRequest(bio *bufio.Reader) {
+func decodeRequest(bio *bufio.Reader) error {
 	req, err := http.ReadRequest(bio)
 	if err == io.EOF {
 		log.Println("decode request err", err)
-		return
+		return err
 	} else if err != nil {
 		log.Println("decode request err", err)
-		return
+		return err
 	} else {
 		var msg = "request ["
 		msg += req.Method
@@ -71,7 +77,7 @@ func decodeRequest(bio *bufio.Reader) {
 		body, err := ioutil.ReadAll(req.Body)
 		if err != nil {
 			log.Println("read request body err", err)
-			return
+			return err
 		}
 		// req.ParseForm()
 		// msg += req.Form.Encode()
@@ -82,16 +88,17 @@ func decodeRequest(bio *bufio.Reader) {
 
 		req.Body.Close()
 	}
+	return nil
 }
 
-func decodeResponse(bio *bufio.Reader) {
+func decodeResponse(bio *bufio.Reader) error {
 	rsp, err := http.ReadResponse(bio, nil)
 	if err == io.EOF {
 		// log.Println("decode response err", err)
-		return
+		return err
 	} else if err != nil {
 		// log.Println("decode response err", err)
-		return
+		return err
 	} else {
 		var msg = "response ["
 		msg += fmt.Sprintf("%+v", rsp.Header)
@@ -99,7 +106,7 @@ func decodeResponse(bio *bufio.Reader) {
 		body, err := ioutil.ReadAll(rsp.Body)
 		if err != nil {
 			// log.Println("read response body err", err)
-			return
+			return err
 		}
 		msg += string(body)
 		msg += "]"
@@ -108,6 +115,7 @@ func decodeResponse(bio *bufio.Reader) {
 
 		rsp.Body.Close()
 	}
+	return nil
 }
 
 func (m *H) BPFFilter() string {
