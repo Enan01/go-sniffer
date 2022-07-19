@@ -357,7 +357,7 @@ func (stm *stream) resolveClientPacket(payload []byte, seq int) {
 }
 
 func formatOneLineSQL(input string) string {
-	buf := bytes.NewBuffer(make([]byte, 32))
+	buf := bytes.NewBuffer(make([]byte, 0, 32))
 	splits := strings.Split(input, "\n")
 
 	for _, split := range splits {
